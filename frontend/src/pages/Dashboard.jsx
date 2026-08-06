@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ENDPOINTS } from '../config/api';
 import api from '../services/api';
 import DashboardCard from '../components/DashboardCard';
 import { ROUTES } from '../utils/constants';
@@ -22,10 +23,10 @@ export default function Dashboard() {
     const fetchCounts = async () => {
       try {
         const [students, courses, attendance, notices] = await Promise.all([
-          api.get('/students?limit=1'),
-          api.get('/courses?limit=1'),
-          api.get('/attendance?limit=1'),
-          api.get('/notices?limit=1'),
+          api.get(`${ENDPOINTS.STUDENTS}?limit=1`),
+          api.get(`${ENDPOINTS.COURSES}?limit=1`),
+          api.get(`${ENDPOINTS.ATTENDANCE}?limit=1`),
+          api.get(`${ENDPOINTS.NOTICES}?limit=1`),
         ]);
         setCounts({
           students: students.data.total || 0,

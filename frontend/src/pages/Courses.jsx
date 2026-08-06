@@ -3,6 +3,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { ENDPOINTS } from '../config/api';
 import api from '../services/api';
 import FormModal from '../components/FormModal';
 
@@ -30,7 +31,7 @@ export default function Courses() {
     try {
       const params = { page, limit: 10 };
       if (search) params.course_name = search;
-      const res = await api.get('/courses', { params });
+      const res = await api.get(ENDPOINTS.COURSES, { params });
       setCourses(res.data.data);
       setTotalPages(res.data.total_pages);
       setTotal(res.data.total);
@@ -69,10 +70,10 @@ export default function Courses() {
     try {
       const payload = { ...form, duration: form.duration || null, faculty: form.faculty || null };
       if (editing) {
-        await api.put(`/courses/${editing.id}`, payload);
+        await api.put(`${ENDPOINTS.COURSES}/${editing.id}`, payload);
         showAlertMsg('Course updated successfully');
       } else {
-        await api.post('/courses', payload);
+        await api.post(ENDPOINTS.COURSES, payload);
         showAlertMsg('Course created successfully');
       }
       setShowForm(false);
@@ -87,7 +88,7 @@ export default function Courses() {
   const handleDelete = async (course) => {
     if (!window.confirm(`Delete course "${course.course_name}"?`)) return;
     try {
-      await api.delete(`/courses/${course.id}`);
+      await api.delete(`${ENDPOINTS.COURSES}/${course.id}`);
       showAlertMsg('Course deleted successfully');
       fetchCourses();
     } catch (err) {

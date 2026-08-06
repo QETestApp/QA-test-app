@@ -3,6 +3,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { ENDPOINTS } from '../config/api';
 import api from '../services/api';
 import FormModal from '../components/FormModal';
 
@@ -39,7 +40,7 @@ export default function Students() {
     try {
       const params = { page, limit: 10 };
       if (search) params.name = search;
-      const res = await api.get('/students', { params });
+      const res = await api.get(ENDPOINTS.STUDENTS, { params });
       setStudents(res.data.data);
       setTotalPages(res.data.total_pages);
       setTotal(res.data.total);
@@ -101,10 +102,10 @@ export default function Students() {
       };
 
       if (editing) {
-        await api.put(`/students/${editing.id}`, payload);
+        await api.put(`${ENDPOINTS.STUDENTS}/${editing.id}`, payload);
         showAlert('Student updated successfully');
       } else {
-        await api.post('/students', payload);
+        await api.post(ENDPOINTS.STUDENTS, payload);
         showAlert('Student created successfully');
       }
       setShowForm(false);
@@ -120,7 +121,7 @@ export default function Students() {
   const handleDelete = async (student) => {
     if (!window.confirm(`Delete student "${student.name}"?`)) return;
     try {
-      await api.delete(`/students/${student.id}`);
+      await api.delete(`${ENDPOINTS.STUDENTS}/${student.id}`);
       showAlert('Student deleted successfully');
       fetchStudents();
     } catch (err) {

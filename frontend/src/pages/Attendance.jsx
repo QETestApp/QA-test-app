@@ -3,6 +3,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { ENDPOINTS } from '../config/api';
 import api from '../services/api';
 import FormModal from '../components/FormModal';
 
@@ -30,7 +31,7 @@ export default function Attendance() {
     try {
       const params = { page, limit: 10 };
       if (filterStatus) params.status = filterStatus;
-      const res = await api.get('/attendance', { params });
+      const res = await api.get(ENDPOINTS.ATTENDANCE, { params });
       setRecords(res.data.data);
       setTotalPages(res.data.total_pages);
       setTotal(res.data.total);
@@ -68,10 +69,10 @@ export default function Attendance() {
     try {
       const payload = { ...form, student_id: parseInt(form.student_id) };
       if (editing) {
-        await api.put(`/attendance/${editing.id}`, payload);
+        await api.put(`${ENDPOINTS.ATTENDANCE}/${editing.id}`, payload);
         showAlertMsg('Attendance updated successfully');
       } else {
-        await api.post('/attendance', payload);
+        await api.post(ENDPOINTS.ATTENDANCE, payload);
         showAlertMsg('Attendance recorded successfully');
       }
       setShowForm(false);
@@ -86,7 +87,7 @@ export default function Attendance() {
   const handleDelete = async (record) => {
     if (!window.confirm('Delete this attendance record?')) return;
     try {
-      await api.delete(`/attendance/${record.id}`);
+      await api.delete(`${ENDPOINTS.ATTENDANCE}/${record.id}`);
       showAlertMsg('Attendance record deleted');
       fetchRecords();
     } catch (err) {

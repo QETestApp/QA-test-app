@@ -3,6 +3,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { ENDPOINTS } from '../config/api';
 import api from '../services/api';
 import FormModal from '../components/FormModal';
 
@@ -30,7 +31,7 @@ export default function Notices() {
     try {
       const params = { page, limit: 10 };
       if (search) params.title = search;
-      const res = await api.get('/notices', { params });
+      const res = await api.get(ENDPOINTS.NOTICES, { params });
       setNotices(res.data.data);
       setTotalPages(res.data.total_pages);
       setTotal(res.data.total);
@@ -68,10 +69,10 @@ export default function Notices() {
     try {
       const payload = { ...form, description: form.description || null, created_by: form.created_by || null };
       if (editing) {
-        await api.put(`/notices/${editing.id}`, payload);
+        await api.put(`${ENDPOINTS.NOTICES}/${editing.id}`, payload);
         showAlertMsg('Notice updated successfully');
       } else {
-        await api.post('/notices', payload);
+        await api.post(ENDPOINTS.NOTICES, payload);
         showAlertMsg('Notice created successfully');
       }
       setShowForm(false);
@@ -86,7 +87,7 @@ export default function Notices() {
   const handleDelete = async (notice) => {
     if (!window.confirm(`Delete notice "${notice.title}"?`)) return;
     try {
-      await api.delete(`/notices/${notice.id}`);
+      await api.delete(`${ENDPOINTS.NOTICES}/${notice.id}`);
       showAlertMsg('Notice deleted successfully');
       fetchNotices();
     } catch (err) {

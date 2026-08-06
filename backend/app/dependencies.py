@@ -8,7 +8,7 @@ from fastapi import Depends, Header
 from sqlalchemy.orm import Session
 import jwt
 
-from app.config import SECRET_KEY, ALGORITHM
+from app.config import settings
 from app.database import get_db
 from app.errors import AppException
 from app.models.user import User
@@ -50,7 +50,7 @@ def get_current_user(
         )
 
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM])
     except jwt.ExpiredSignatureError:
         raise AppException(
             status_code=401,

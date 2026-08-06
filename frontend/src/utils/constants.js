@@ -1,9 +1,10 @@
 /**
- * API base URL and route path constants.
+ * Frontend route constants.
  */
 
-export const API_BASE_URL =
-  import.meta.env.VITE_API_URL || 'http://localhost:9000';
+import { API_BASE_URL } from '../config/api';
+
+export { API_BASE_URL };
 
 export const ROUTES = {
   LOGIN: '/login',

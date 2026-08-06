@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 import hashlib
 import jwt
 
-from app.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from app.config import settings
 from app.database import get_db
 from app.dependencies import get_current_user, blacklist_token
 from app.errors import AppException
@@ -32,9 +32,9 @@ def _hash_password(password: str) -> str:
 def _create_access_token(data: dict) -> str:
     """Create a JWT access token."""
     to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return jwt.encode(to_encode, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
 
 
 @router.post(

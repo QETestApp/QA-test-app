@@ -5,16 +5,27 @@
 
 import { createContext, useContext, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ENDPOINTS } from '../config/api';
 import api from '../services/api';
 import { ROUTES } from '../utils/constants';
 
 const AuthContext = createContext(null);
 
+function readStoredUser() {
+  const stored = localStorage.getItem('user');
+  if (!stored) return null;
+
+  try {
+    return JSON.parse(stored);
+  } catch {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    return null;
+  }
+}
+
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem('user');
-    return stored ? JSON.parse(stored) : null;
-  });
+  const [user, setUser] = useState(readStoredUser);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -23,7 +34,7 @@ export function AuthProvider({ children }) {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.post('/auth/login', { email, password });
+      const response = await api.post(ENDPOINTS.LOGIN, { email, password });
       const { token, user: userData } = response.data.data;
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(userData));
@@ -41,7 +52,7 @@ export function AuthProvider({ children }) {
 
   const logout = useCallback(async () => {
     try {
-      await api.post('/auth/logout');
+      await api.post(ENDPOINTS.LOGOUT);
     } catch {
       // Ignore errors on logout — clear local state regardless
     }
