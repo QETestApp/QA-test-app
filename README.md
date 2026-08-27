@@ -2,7 +2,7 @@
 
 A full-stack web application designed as a **QA testing playground**, exposing **23 realistic REST APIs** with complete CRUD, JWT authentication, OpenAPI documentation, validation, and predictable workflows.
 
-## Quick Start
+## Quick Start((
 
 ### Backend (FastAPI)
 
