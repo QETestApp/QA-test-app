@@ -4,7 +4,7 @@ Authentication router.
 Endpoints:
     POST /auth/login   — Authenticate and receive JWT
     POST /auth/logout  — Invalidate JWT
-    GET  /auth/profile — Get current user profile
+    GET  /auth/profile — Get current user profile and user 
 """
 
 from datetime import datetime, timedelta, timezone
